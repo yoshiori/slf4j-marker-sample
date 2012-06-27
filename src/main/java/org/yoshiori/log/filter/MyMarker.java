@@ -60,6 +60,7 @@ public enum MyMarker implements Marker {
 		} else {
 			// let's add the reference
 			if (refereceList == null) {
+				//TODO なんで vector なのか調べる
 				refereceList = new Vector<Marker>();
 			}
 			refereceList.add(reference);
