@@ -1,0 +1,81 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<Target>System.out</Target>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>[%-5level][%d{yyyy-MM-dd HH:mm:ss.SSS}][%marker] %class - %msg%n
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<!--Daily rolling file appender -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/tmp/log/yoshiori.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/tmp/log/yoshiori.%d{yyyy-MM-dd}.log.gz
+			</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>[%-5level][%d{yyyy-MM-dd HH:mm:ss.SSS}][%marker] %class - %msg%n
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ON_MATCH_DENY"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/tmp/log/on_match_deny_log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/tmp/log/on_match_deny.%d{yyyy-MM-dd}.log.gz
+			</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>[%-5level][%d{yyyy-MM-dd HH:mm:ss.SSS}][%marker] %class - %msg%n
+			</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<filter class="org.yoshiori.log.filter.MarkerFilter">
+			<marker>org.yoshiori.log.filter.MyMarker</marker>
+			<onMatch>DENY</onMatch>
+		</filter>
+	</appender>
+
+	<!--Daily rolling file appender -->
+	<appender name="ON_MISMATCH_DENY"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/tmp/log/on_mismatch_deny_log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/tmp/log/on_mismatch_deny.%d{yyyy-MM-dd}.log.gz
+			</FileNamePattern>
+			<MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>[%-5level][%d{yyyy-MM-dd HH:mm:ss.SSS}][%marker] %class - %msg%n
+			</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<filter class="org.yoshiori.log.filter.MarkerFilter">
+			<marker>org.yoshiori.log.filter.MyMarker.HOGE</marker>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<logger name="org.yoshiori.log" level="trace">
+		<appender-ref ref="ON_MATCH_DENY" />
+		<appender-ref ref="ON_MISMATCH_DENY" />
+	</logger>
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
